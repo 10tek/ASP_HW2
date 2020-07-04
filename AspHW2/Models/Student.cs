@@ -21,6 +21,6 @@ namespace AspHW2.Models
         [Range(1, 5, ErrorMessage = "Оценка не является валидной")]
         public double Mark { get; set; }
 
-        public List<Course> Courses { get; set; } = new List<Course>();
+        public Course Course { get; set; }
     }
 }

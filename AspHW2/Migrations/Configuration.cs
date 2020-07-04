@@ -20,7 +20,24 @@
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method
             //  to avoid creating duplicate seed data.
-            
+            var student = new Student
+            {
+                Course = new Course(),
+                Id = 1,
+                LastName = "Oralbayev",
+                Name = "Galymzhan",
+                Mark = 5
+            };
+            context.Students.Add(student);
+            context.Subjects.Add(new Subject
+            {
+                 Id = 1,
+                 CourseName = "Math",
+                 Room = 5,
+                 Students = new System.Collections.Generic.List<Student> { student },
+                 Title = "qwe"
+            });
+            context.SaveChanges();
         }
     }
 }
