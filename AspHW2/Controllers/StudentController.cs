@@ -1,5 +1,6 @@
 ﻿using AspHW2.Data;
 using AspHW2.Models;
+using AspHW2.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -108,6 +109,57 @@ namespace AspHW2.Controllers
             db.Students.Remove(student);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Enroll()
+        {
+            var model = new StudentCoursesViewModel();
+            ViewBag.Students = db.Students.ToList();
+            ViewBag.Courses = db.Courses.ToList();
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult Enroll(StudentCoursesViewModel model)
+        {
+            var student = db.Students.Find(model.StudentId);
+            var course = db.Courses.Find(model.CourseId);
+
+            if (student != null && course != null)
+            {
+                student.Courses = new List<Course>();
+                student.Courses.Add(course);
+                db.SaveChanges();
+                return RedirectToAction("Details", new { id = student.Id });
+            }
+            return View();
+        }
+
+        public ActionResult UnEnroll()
+        {
+            var model = new StudentCoursesViewModel();
+            ViewBag.Students = db.Students.ToList();
+            ViewBag.Courses = db.Courses.ToList();
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult UnEnroll(StudentCoursesViewModel model)
+        {
+            var student = db.Students.Include(x => x.Courses).FirstOrDefault(s => s.Id == model.StudentId);
+            var course = db.Courses.Find(model.CourseId);
+
+            if (student != null)
+            {
+                if (!student.Courses.Contains(course))
+                {
+                    return RedirectToAction("Index");
+                }
+
+                student.Courses.Remove(course);
+                db.SaveChanges();
+                return RedirectToAction("Details", new { id = student.Id });
+
+            }
+            return View();
         }
 
         protected override void Dispose(bool disposing)

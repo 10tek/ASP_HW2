@@ -2,6 +2,7 @@
 {
     using AspHW2.Models;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -22,7 +23,7 @@
             //  to avoid creating duplicate seed data.
             var student = new Student
             {
-                Course = new Course(),
+                Courses = new List<Course>(),
                 Id = 1,
                 LastName = "Oralbayev",
                 Name = "Galymzhan",
